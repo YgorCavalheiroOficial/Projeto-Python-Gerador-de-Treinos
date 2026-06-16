@@ -61,10 +61,13 @@ Antes de começar, certifique-se de ter o **Python 3.10 ou superior** instalado 
 ## Funcionalidades Implementadas
 * **Interface Gráfica Consistente:** Telas padronizadas usando CustomTkinter, com menus de navegação intuitivos e suporte total a teclas de atalho no teclado para acessibilidade.
 
-* **Internacionalização Automática (i18n):** O sistema detecta o idioma padrão do Sistema Operacional do usuário no momento da inicialização e traduz toda a interface para Português, Inglês ou Espanhol de forma transparente, sem exigir configuração manual.
-
 * **Módulo de Cadastro Completo (CRUD):** Gerenciamento e persistência relacional de Usuários, Exercícios e Planos de Treino utilizando o ORM SQLAlchemy.
 
 * **Algoritmo de Sugestão Inteligente:** Motor de regras que processa os dados biológicos do usuário e monta automaticamente a divisão do treino (ex: ABC, ABCD), distribuindo os exercícios e calculando volume de séries e descanso ideais.
 
 * **Ficha de Treino em PDF:** Exportação da sugestão de treino gerada para um documento PDF profissional através da biblioteca ReportLab, pronto para impressão ou uso no celular.
+
+---
+
+## ToDo
+* **Internacionalização Automática (i18n):** O sistema detecta o idioma padrão do Sistema Operacional do usuário no momento da inicialização e traduz toda a interface para Português, Inglês ou Espanhol de forma transparente, sem exigir configuração manual.
