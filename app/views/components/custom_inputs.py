@@ -1,7 +1,6 @@
 import customtkinter as ctk
 
 class CustomFormInput(ctk.CTkFrame):
-    """Componente reutilizável para manter consistência visual nos formulários."""
     def __init__(self, master, label_text, placeholder="", **kwargs):
         super().__init__(master, fg_color="transparent", **kwargs)
         
@@ -16,3 +15,8 @@ class CustomFormInput(ctk.CTkFrame):
 
     def clear(self):
         self.entry.delete(0, "end")
+
+    def set_text(self, text):
+        """Preenche o campo com um texto específico (Útil para Edição)."""
+        self.clear()
+        self.entry.insert(0, str(text))
