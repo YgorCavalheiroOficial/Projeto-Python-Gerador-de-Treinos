@@ -30,6 +30,10 @@ class UsuarioView(ctk.CTkFrame):
         self.txt_altura = CustomFormInput(form_frame, "Altura (m):", "Ex: 1.78")
         self.txt_altura.pack(fill="x", padx=15, pady=4)
 
+        ctk.CTkLabel(form_frame, text="Sexo:", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w", padx=15, pady=(4,0))
+        self.cb_sexo = ctk.CTkComboBox(form_frame, values=["Masculino", "Feminino", "Prefiro não informar"], height=35)
+        self.cb_sexo.pack(fill="x", padx=15, pady=4)
+        
         ctk.CTkLabel(form_frame, text="Biotipo:", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w", padx=15, pady=(4,0))
         self.cb_biotipo = ctk.CTkComboBox(form_frame, values=["Ectomorfo", "Mesomorfo", "Endomorfo"], height=35)
         self.cb_biotipo.pack(fill="x", padx=15, pady=4)
@@ -37,6 +41,9 @@ class UsuarioView(ctk.CTkFrame):
         ctk.CTkLabel(form_frame, text="Objetivo:", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w", padx=15, pady=(4,0))
         self.cb_objetivo = ctk.CTkComboBox(form_frame, values=["Hipertrofia", "Emagrecimento", "Resistência"], height=35)
         self.cb_objetivo.pack(fill="x", padx=15, pady=4)
+
+        self.txt_descricao = CustomFormInput(form_frame, "Descrição:", "Descreva problemas de saúde ou desconfortos musculares...")
+        self.txt_descricao.pack(fill="x", padx=15, pady=4)
 
         self.btn_salvar = ctk.CTkButton(form_frame, text="Salvar Usuário", command=self.processar_salvamento, fg_color="#2E7D32", hover_color="#1B5E20", height=38)
         self.btn_salvar.pack(fill="x", padx=15, pady=(15, 5))
@@ -79,8 +86,10 @@ class UsuarioView(ctk.CTkFrame):
                     nome=self.txt_nome.get(),
                     peso=self.txt_peso.get(),
                     altura=self.txt_altura.get(),
+                    sexo=self.cb_sexo.get(),
                     biotipo=self.cb_biotipo.get(),
-                    objetivo=self.cb_objetivo.get()
+                    objetivo=self.cb_objetivo.get(),
+                    descricao=self.txt_descricao.get()
                 )
                 messagebox.showinfo("Sucesso", "Usuário atualizado com sucesso!")
             else:
@@ -89,9 +98,10 @@ class UsuarioView(ctk.CTkFrame):
                     nome=self.txt_nome.get(),
                     peso=self.txt_peso.get(),
                     altura=self.txt_altura.get(),
-                    sexo="Masculino",
+                    sexo=self.cb_sexo.get(),
                     biotipo=self.cb_biotipo.get(),
-                    objetivo=self.cb_objetivo.get()
+                    objetivo=self.cb_objetivo.get(),
+                    descricao=self.txt_descricao.get()
                 )
                 messagebox.showinfo("Sucesso", "Usuário cadastrado com sucesso!")
             
@@ -121,6 +131,7 @@ class UsuarioView(ctk.CTkFrame):
         self.txt_nome.set_text(usuario.nome)
         self.txt_peso.set_text(usuario.peso)
         self.txt_altura.set_text(usuario.altura)
+        self.cb_sexo.set(usuario.sexo)
         self.cb_biotipo.set(usuario.biotipo)
         self.cb_objetivo.set(usuario.objetivo)
 

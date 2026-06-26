@@ -5,8 +5,8 @@ class UsuarioController:
     def __init__(self):
         self.db = get_db()
 
-    def cadastrar(self, nome, peso, altura, sexo, biotipo, objetivo):
-        usuario = Usuario(nome=nome, peso=float(peso), altura=float(altura), sexo=sexo, biotipo=biotipo, objetivo=objetivo)
+    def cadastrar(self, nome, peso, altura, sexo, biotipo, objetivo, descricao):
+        usuario = Usuario(nome=nome, peso=float(peso), altura=float(altura), sexo=sexo, biotipo=biotipo, objetivo=objetivo, descricao=descricao)
         self.db.add(usuario)
         self.db.commit()
         return usuario
@@ -14,7 +14,7 @@ class UsuarioController:
     def buscar_por_id(self, usuario_id):
         return self.db.query(Usuario).filter(Usuario.id == usuario_id).first()
 
-    def atualizar(self, usuario_id, nome, peso, altura, biotipo, objetivo):
+    def atualizar(self, usuario_id, nome, peso, altura, biotipo, objetivo, descricao):
         usuario = self.buscar_por_id(usuario_id)
         if usuario:
             usuario.nome = nome
@@ -22,6 +22,7 @@ class UsuarioController:
             usuario.altura = float(altura)
             usuario.biotipo = biotipo
             usuario.objetivo = objetivo
+            usuario.descricao = descricao
             self.db.commit()
             return usuario
         return None

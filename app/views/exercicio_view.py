@@ -25,7 +25,7 @@ class ExercicioView(ctk.CTkFrame):
         self.txt_nome.pack(fill="x", padx=15, pady=5)
 
         ctk.CTkLabel(form_frame, text="Grupo Muscular:", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w", padx=15, pady=(5,0))
-        self.cb_grupo = ctk.CTkComboBox(form_frame, values=["Peito", "Costas", "Pernas", "Braços", "Ombros"], height=35)
+        self.cb_grupo = ctk.CTkComboBox(form_frame, values=["Peito", "Costas", "Quadríceps", "Posterior", "Panturrilha", "Bíceps", "Tríceps", "Antebraço", "Ombros", "Cárdio"], height=35)
         self.cb_grupo.pack(fill="x", padx=15, pady=5)
 
         self.txt_desc = CustomFormInput(form_frame, "Breve Descrição:")
