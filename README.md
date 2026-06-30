@@ -67,10 +67,11 @@ Antes de começar, certifique-se de ter o **Python 3.10 ou superior** instalado 
 
 * **Ficha de Treino em PDF:** Exportação da sugestão de treino gerada para um documento PDF profissional através da biblioteca ReportLab, pronto para impressão ou uso no celular.
 
+* **Internacionalização Automática (i18n):** O sistema detecta o idioma padrão do Sistema Operacional do usuário no momento da inicialização e traduz toda a interface para Português, Inglês ou Espanhol de forma transparente, sem exigir configuração manual.
+
 ---
 
 ## ToDo
-* **Internacionalização Automática (i18n):** O sistema detecta o idioma padrão do Sistema Operacional do usuário no momento da inicialização e traduz toda a interface para Português, Inglês ou Espanhol de forma transparente, sem exigir configuração manual.
 * **Módulo de Autenticação e Níveis de Acesso:** Login seguro para diferentes professores/personal trainers isolarem seus respectivos alunos.
 * **Dashboard Gráfico de Evolução:** Gráficos interativos integrados à interface (usando Matplotlib) para exibir o histórico de peso, IMC e carga do aluno ao longo do tempo.
 * **Cronômetro de Descanso Integrado:** Um timer visual na tela de treinos para auxiliar o usuário a computar o tempo de descanso entre as séries em tempo real.
