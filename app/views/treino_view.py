@@ -3,6 +3,7 @@ import os
 from tkinter import messagebox, filedialog
 from app.controllers.treino_controller import TreinoController
 from app.controllers.usuario_controller import UsuarioController
+from app.services.locale_manager import LocaleManager 
 
 class TreinoView(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
@@ -19,15 +20,15 @@ class TreinoView(ctk.CTkFrame):
         top_frame = ctk.CTkFrame(self, height=70, corner_radius=12)
         top_frame.pack(fill="x", padx=15, pady=15)
 
-        ctk.CTkLabel(top_frame, text="Selecione o Aluno:", font=ctk.CTkFont(size=14, weight="bold")).pack(side="left", padx=15)
+        ctk.CTkLabel(top_frame, text=LocaleManager.t("selecione_aluno"), font=ctk.CTkFont(size=14, weight="bold")).pack(side="left", padx=15)
         
         self.cb_usuarios = ctk.CTkComboBox(top_frame, values=[], width=250, height=35)
         self.cb_usuarios.pack(side="left", padx=10)
         
-        self.btn_carregar = ctk.CTkButton(top_frame, text="🔄 Sincronizar Alunos", command=self.carregar_usuarios, width=150, height=35)
+        self.btn_carregar = ctk.CTkButton(top_frame, text=LocaleManager.t("sincronizar_alunos"), command=self.carregar_usuarios, width=150, height=35)
         self.btn_carregar.pack(side="left", padx=5)
 
-        self.btn_gerar = ctk.CTkButton(top_frame, text="⚡ Gerar Treino Inteligente", command=self.gerar_treino, fg_color="#E65100", hover_color="#BF360C", height=35)
+        self.btn_gerar = ctk.CTkButton(top_frame, text=LocaleManager.t("gerar_treino_inteligente"), command=self.gerar_treino, fg_color="#E65100", hover_color="#BF360C", height=35)
         self.btn_gerar.pack(side="left", padx=10)
 
         # Conteúdo do Treino
@@ -37,7 +38,7 @@ class TreinoView(ctk.CTkFrame):
         self.txt_treino = ctk.CTkTextbox(self.content_frame, font=ctk.CTkFont(family="Courier", size=12))
         self.txt_treino.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.btn_pdf = ctk.CTkButton(self, text="💾 Exportar Ficha de Treino Oficial (PDF)", command=self.exportar_pdf, state="disabled", fg_color="#1565C0", height=45)
+        self.btn_pdf = ctk.CTkButton(self, text=LocaleManager.t("exportar_ficha_treino"), command=self.exportar_pdf, state="disabled", fg_color="#1565C0", height=45)
         self.btn_pdf.pack(fill="x", padx=15, pady=(0, 15))
 
         self.carregar_usuarios()
@@ -52,7 +53,7 @@ class TreinoView(ctk.CTkFrame):
     def gerar_treino(self):
         selecionado = self.cb_usuarios.get()
         if not selecionado:
-            messagebox.showwarning("Aviso", "Cadastre e selecione um aluno primeiro.")
+            messagebox.showwarning(LocaleManager.t("titulo_erro"), LocaleManager.t("erro_selecionar_usuario"))
             return
 
         usuario_id = self.mapeamento_usuarios[selecionado]
@@ -69,7 +70,7 @@ class TreinoView(ctk.CTkFrame):
             
             self.txt_treino.insert("end", resumo)
             self.btn_pdf.configure(state="normal")
-            messagebox.showinfo("Motor Inteligente", "Regras aplicadas e treino estruturado com sucesso!")
+            messagebox.showinfo(LocaleManager.t("titulo_sucesso"), LocaleManager.t("treino_gerado_sucesso"))
 
     def exportar_pdf(self):
         if not self.plano_atual:
@@ -77,10 +78,11 @@ class TreinoView(ctk.CTkFrame):
         
         caminho = filedialog.asksaveasfilename(
             defaultextension=".pdf",
-            filetypes=[("Documentos PDF", "*.pdf")],
-            title="Salvar Ficha de Treino"
+            filetypes=[(LocaleManager.t("documentos_pdf"), "*.pdf")],
+            title=LocaleManager.t("salvar_ficha_treino")
         )
         
         if caminho:
             self.treino_controller.baixar_pdf(self.plano_atual.id, caminho)
-            messagebox.showinfo("PDF Exportado", f"Ficha salva com sucesso em:\n{caminho}")
+            msg_sucesso = f"{LocaleManager.t('pdf_salvo_sucesso')}\n{caminho}"
+            messagebox.showinfo(LocaleManager.t("titulo_sucesso"), msg_sucesso)

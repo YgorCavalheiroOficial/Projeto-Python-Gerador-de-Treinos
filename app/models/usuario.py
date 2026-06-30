@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from app.models.base import Base
 
 class Usuario(Base):
@@ -12,6 +13,10 @@ class Usuario(Base):
     biotipo = Column(String(20), nullable=False) 
     objetivo = Column(String(50), nullable=False) 
     descricao = Column(String(500), nullable=False)
+
+    # Relacionamento: Vincula o Aluno ao Professor
+    professor_id = Column(Integer, ForeignKey('professores.id'), nullable=False)
+    professor = relationship("Professor", back_populates="alunos")
 
     def calcular_imc(self) -> float:
         """Calcula o Índice de Massa Corporal do usuário."""

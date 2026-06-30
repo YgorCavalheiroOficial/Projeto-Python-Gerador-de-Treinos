@@ -1,9 +1,9 @@
-from app.config import get_db
+from app.config import SessionLocal
 from app.models.exercicio import Exercicio
 
 class ExercicioController:
     def __init__(self):
-        self.db = get_db()
+        self.db = SessionLocal()
 
     def cadastrar(self, nome, grupo_muscular, descricao):
         exercicio = Exercicio(nome=nome, grupo_muscular=grupo_muscular, descricao=descricao)

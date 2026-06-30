@@ -1,4 +1,4 @@
-from app.config import get_db
+from app.config import SessionLocal
 from app.models.plano_treino import PlanoTreino
 from app.models.usuario import Usuario
 from app.services.gerador_treino import GeradorTreinoService
@@ -6,7 +6,7 @@ from app.services.gerador_pdf import GeradorPDFService
 
 class TreinoController:
     def __init__(self):
-        self.db = get_db()
+        self.db = SessionLocal()
 
     def gerar_novo_treino(self, usuario_id):
         usuario = self.db.query(Usuario).filter(Usuario.id == usuario_id).first()
