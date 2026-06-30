@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from app.views.usuario_view import UsuarioView
 from app.views.exercicio_view import ExercicioView
+from app.services.locale_manager import LocaleManager
 from app.views.treino_view import TreinoView
 
 class MainWindow(ctk.CTk):
@@ -26,14 +27,15 @@ class MainWindow(ctk.CTk):
         lbl_logo = ctk.CTkLabel(self.sidebar, text="FitLogic v1.0", font=ctk.CTkFont(size=20, weight="bold"))
         lbl_logo.pack(pady=30, padx=20)
 
-        # Botões do Menu com consistência visual
-        self.btn_usuarios = ctk.CTkButton(self.sidebar, text="Alunos (Ctrl+U)", anchor="w", height=40, command=lambda: self.exibir_aba("usuarios"))
-        self.btn_usuarios.pack(fill="x", padx=15, pady=5)
+        # Botões do Menu ancorados corretamente na self.sidebar
+        # CORREÇÃO: Alterado de py=5 para pady=5
+        self.btn_alunos = ctk.CTkButton(self.sidebar, text=LocaleManager.t("btn_nav_alunos"), anchor="w", height=40, command=lambda: self.exibir_aba("usuarios"))
+        self.btn_alunos.pack(fill="x", padx=15, pady=5)
 
-        self.btn_exercicios = ctk.CTkButton(self.sidebar, text="Exercícios (Ctrl+E)", anchor="w", height=40, command=lambda: self.exibir_aba("exercicios"))
+        self.btn_exercicios = ctk.CTkButton(self.sidebar, text=LocaleManager.t("btn_nav_exercicios"), anchor="w", height=40, command=lambda: self.exibir_aba("exercicios"))
         self.btn_exercicios.pack(fill="x", padx=15, pady=5)
 
-        self.btn_treinos = ctk.CTkButton(self.sidebar, text="Gerar Treinos (Ctrl+T)", anchor="w", height=40, command=lambda: self.exibir_aba("treinos"))
+        self.btn_treinos = ctk.CTkButton(self.sidebar, text=LocaleManager.t("btn_nav_treinos"), anchor="w", height=40, command=lambda: self.exibir_aba("treinos"))
         self.btn_treinos.pack(fill="x", padx=15, pady=5)
 
         # Container Principal Direito
@@ -49,14 +51,23 @@ class MainWindow(ctk.CTk):
 
     def exibir_aba(self, nome_aba):
         """Alterna dinamicamente os frames na tela garantindo consistência estrutural."""
+        botoes_menu = {
+            "usuarios": self.btn_alunos,
+            "exercicios": self.btn_exercicios,
+            "treinos": self.btn_treinos
+        }
+
         for name, view in self.views.items():
+            botao = botoes_menu.get(name)
             if name == nome_aba:
                 view.pack(fill="both", expand=True)
-                # Destaca botão ativo
-                getattr(self, f"btn_{name}").configure(fg_color="#1976D2")
+                if botao:
+                    botao.configure(fg_color="#1976D2")  # Cor de destaque do botão ativo
             else:
                 view.pack_forget()
-                getattr(self, f"btn_{name}").configure(fg_color=["#3B8ED0", "#1F538D"])
+                if botao:
+                    # CORREÇÃO: Uso de tupla ( ) no lugar de lista [ ] para não dar erro de Tcl
+                    botao.configure(fg_color=("#3B8ED0", "#1F538D"))
 
     def configurar_atalhos(self):
         """Mapeamento global de teclas de atalho exigido no projeto desktop."""

@@ -26,9 +26,11 @@ class ExercicioView(ctk.CTkFrame):
 
         ctk.CTkLabel(form_frame, text="Grupo Muscular:", font=ctk.CTkFont(size=13, weight="bold")).pack(anchor="w", padx=15, pady=(5,0))
         self.cb_grupo = ctk.CTkComboBox(form_frame, values=["Peito", "Costas", "Quadríceps", "Posterior", "Panturrilha", "Bíceps", "Tríceps", "Antebraço", "Ombros", "Cárdio"], height=35)
+        # CORREÇÃO: Alterado de py=5 para pady=5
         self.cb_grupo.pack(fill="x", padx=15, pady=5)
 
         self.txt_desc = CustomFormInput(form_frame, "Breve Descrição:")
+        # CORREÇÃO: Alterado de py=5 para pady=5
         self.txt_desc.pack(fill="x", padx=15, pady=5)
 
         self.btn_salvar = ctk.CTkButton(form_frame, text="Salvar Exercício", command=self.processar_salvamento, fg_color="#2E7D32", hover_color="#1B5E20", height=40)
@@ -115,7 +117,8 @@ class ExercicioView(ctk.CTkFrame):
 
     def limpar_formulario(self):
         self.id_em_edicao = None
-        self.lbl_titulo_form.configure(text="Cadastro de Exercício", text_color=["#000", "#fff"])
+        # CORREÇÃO PREVENTIVA: Trocado colchetes [] por parênteses ()
+        self.lbl_titulo_form.configure(text="Cadastro de Exercício", text_color=("#000", "#fff"))
         self.btn_salvar.configure(text="Salvar Exercício", fg_color="#2E7D32", hover_color="#1B5E20")
         self.btn_cancelar.pack_forget()
         self.txt_nome.clear()

@@ -1,7 +1,10 @@
 from app.config import inicializar_banco
+from app.services.locale_manager import LocaleManager
 from app.views.main_window import MainWindow
 
 def main():
+    LocaleManager.inicializar()
+
     print("[FitLogic] Inicializando persistência relacional (SQLite + SQLAlchemy)...")
     inicializar_banco()
     
