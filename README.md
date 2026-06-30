@@ -7,6 +7,10 @@
 ### Modelagem UML inicial do projeto:
 ![UML](./images/UML%20do%20projeto.png)
 
+
+### Modelagem UML final do projeto:
+![UML](./images/UML%20ATUALIZADO.png)
+
 ---
 
 ## 🏋️‍♂️ O que é o FitLogic?

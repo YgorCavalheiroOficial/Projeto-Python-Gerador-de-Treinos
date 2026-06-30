@@ -16,7 +16,7 @@ mkdocs build   # gerar a versão estática em site/
 
 O FitLogic segue o padrão **MVC (Model-View-Controller)**:
 
-- **Models** (`app/models`): entidades de domínio mapeadas via SQLAlchemy ORM (Usuario, Exercicio, PlanoTreino, ItemTreino, Professor, SessionManager).
+- **Models** (`app/models`): entidades de domínio mapeadas via SQLAlchemy ORM (Usuario, Exercicio, PlanoTreino, Professor, SessionManager).
 - **Controllers** (`app/controllers`): orquestram a comunicação entre as views e os models/services.
 - **Services** (`app/services`): regras de negócio reutilizáveis (algoritmo de geração de treino, exportação em PDF, internacionalização).
 - **Views** (`app/views`): interface gráfica construída com CustomTkinter.
