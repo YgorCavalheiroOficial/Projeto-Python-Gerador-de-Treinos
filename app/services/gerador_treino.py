@@ -70,15 +70,49 @@ class GeradorTreinoService:
         
         # Se não houver exercícios cadastrados, cria alguns básicos para o MVP rodar limpo
         if not exercicios:
-            basicos = [
-                Exercicio(nome="Supino Reto", grupo_muscular="Peito", descricao="Barra livre"),
-                Exercicio(nome="Puxada Frente", grupo_muscular="Costas", descricao="Na polia"),
-                Exercicio(nome="Agachamento Livre", grupo_muscular="Pernas", descricao="Com barra"),
-                Exercicio(nome="Desenvolvimento", grupo_muscular="Ombros", descricao="Com halteres")
+            catalogo_padrao = [
+                # Peito
+                Exercicio(nome="Supino Reto", grupo_muscular="Peito", descricao="Executado com barra livre para força e volume."),
+                Exercicio(nome="Supino Inclinado", grupo_muscular="Peito", descricao="Executado com halteres para foco na porção superior."),
+                
+                # Costas
+                Exercicio(nome="Puxada Frente", grupo_muscular="Costas", descricao="Executado na polia alta para amplitude dorsal."),
+                Exercicio(nome="Remada Baixa", grupo_muscular="Costas", descricao="Executado com puxador triângulo para espessura."),
+                
+                # Quadríceps
+                Exercicio(nome="Agachamento Livre", grupo_muscular="Quadríceps", descricao="Exercício composto com barra livre, base para membros inferiores."),
+                Exercicio(nome="Cadeira Extensora", grupo_muscular="Quadríceps", descricao="Exercício isolador focado na definição do quadríceps."),
+                
+                # Posterior
+                Exercicio(nome="Stiff", grupo_muscular="Posterior", descricao="Executado com barra para a cadeia posterior e glúteos."),
+                Exercicio(nome="Mesa Flexora", grupo_muscular="Posterior", descricao="Exercício isolador focado nos flexores de perna."),
+                
+                # Panturrilha
+                Exercicio(nome="Gêmeos Sentado", grupo_muscular="Panturrilha", descricao="Executado na máquina para desenvolvimento do sóleo."),
+                Exercicio(nome="Panturrilha em Pé", grupo_muscular="Panturrilha", descricao="Executado no degrau ou Smith para foco no gastrocnêmio."),
+                
+                # Bíceps
+                Exercicio(nome="Rosca Direta", grupo_muscular="Bíceps", descricao="Executado com barra W para ganho de massa no bíceps."),
+                Exercicio(nome="Rosca Alternada", grupo_muscular="Bíceps", descricao="Executado com halteres e rotação de punho (supinação)."),
+                
+                # Tríceps
+                Exercicio(nome="Tríceps Pulley", grupo_muscular="Tríceps", descricao="Executado na polia com o acessório corda."),
+                Exercicio(nome="Tríceps Testa", grupo_muscular="Tríceps", descricao="Executado deitado com barra de forma isolada."),
+                
+                # Antebraço
+                Exercicio(nome="Rosca Inversa", grupo_muscular="Antebraço", descricao="Executado com barra para a porção braquiorradial."),
+                
+                # Ombros
+                Exercicio(nome="Desenvolvimento", grupo_muscular="Ombros", descricao="Executado com halteres para o deltoide anterior e lateral."),
+                Exercicio(nome="Elevação Lateral", grupo_muscular="Ombros", descricao="Executado com halteres para isolamento do deltoide lateral."),
+                
+                # Cárdio
+                Exercicio(nome="Corrida na Esteira", grupo_muscular="Cárdio", descricao="Treino aeróbico focado em capacidade cardiorrespiratória."),
+                Exercicio(nome="Bicicleta Ergométrica", grupo_muscular="Cárdio", descricao="Estacionária, ótima opção de baixo impacto articular.")
             ]
-            db.add_all(basicos)
+            db.add_all(catalogo_padrao)
             db.flush()
-            exercicios = basicos
+            exercicios = catalogo_padrao
 
         # 4. Aloca os exercícios dentro do plano gerado
         for ex in exercicios:
