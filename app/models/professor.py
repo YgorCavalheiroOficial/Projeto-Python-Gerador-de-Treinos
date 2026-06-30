@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from app.models.base import Base  # Certifique-se de que sua classe Base está em base.py
+from app.models.base import Base 
 
 class Professor(Base):
     """Representa um professor/personal trainer autenticado no sistema.
