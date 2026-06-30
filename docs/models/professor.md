@@ -1,0 +1,3 @@
+# Professor
+
+::: app.models.professor

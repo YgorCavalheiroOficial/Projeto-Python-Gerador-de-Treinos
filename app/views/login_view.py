@@ -1,3 +1,5 @@
+"""Tela de autenticação (login) do FitLogic."""
+
 import customtkinter as ctk
 from tkinter import messagebox
 from app.controllers.auth_controller import AuthController
@@ -5,7 +7,29 @@ from app.models.session_manager import SessionManager
 from app.services.locale_manager import LocaleManager
 
 class LoginView(ctk.CTk):
+    """Janela inicial de login, exibida antes de qualquer outra tela.
+
+    Coleta e-mail/senha do professor, delega a validação ao
+    :class:`~app.controllers.auth_controller.AuthController` e, em caso de
+    sucesso, fecha-se e aciona o callback ``on_login_success`` (responsável
+    por abrir a :class:`~app.views.main_window.MainWindow`).
+
+    Attributes:
+        on_login_success (Callable): Função de callback chamada após um
+            login bem-sucedido.
+        controller (AuthController): Controller responsável por validar as
+            credenciais informadas.
+    """
+
     def __init__(self, on_login_success, **kwargs):
+        """Inicializa a janela de login.
+
+        Args:
+            on_login_success (Callable): Função sem argumentos a ser
+                chamada quando o login for validado com sucesso.
+            **kwargs: Argumentos adicionais repassados ao construtor de
+                ``ctk.CTk``.
+        """
         super().__init__(**kwargs)
         
         # Garante a inicialização do idioma correspondente ao sistema operacional
@@ -21,6 +45,7 @@ class LoginView(ctk.CTk):
         self.setup_ui()
 
     def setup_ui(self):
+        """Monta os widgets da tela de login (campos de e-mail, senha e botão)."""
         frame = ctk.CTkFrame(self, corner_radius=15)
         frame.pack(pady=30, padx=30, fill="both", expand=True)
 
@@ -37,6 +62,12 @@ class LoginView(ctk.CTk):
         btn_entrar.pack(pady=(25, 10))
 
     def fazer_login(self):
+        """Valida os campos preenchidos e tenta autenticar o professor.
+
+        Exibe um aviso caso e-mail ou senha estejam vazios. Em caso de
+        credenciais válidas, fecha a tela de login e dispara o callback
+        ``on_login_success``; caso contrário, exibe uma mensagem de erro.
+        """
         email = self.txt_email.get().strip()
         senha = self.txt_senha.get().strip()
 

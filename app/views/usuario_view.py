@@ -1,3 +1,5 @@
+"""Tela de cadastro e gerenciamento dos alunos (Usuario) do professor logado."""
+
 import customtkinter as ctk
 from tkinter import messagebox
 from app.controllers.usuario_controller import UsuarioController
@@ -5,13 +7,36 @@ from app.views.components.custom_inputs import CustomFormInput
 from app.services.locale_manager import LocaleManager  # Importação do gerenciador i18n
 
 class UsuarioView(ctk.CTkFrame):
+    """Tela de CRUD de alunos, com formulário antropométrico e listagem.
+
+    Segue o mesmo padrão visual e de organização de botões das demais
+    telas do sistema (formulário à esquerda, listagem à direita, ações de
+    editar/excluir por ID), garantindo a consistência exigida entre as
+    telas da aplicação. Os dados aqui cadastrados (peso, altura, biotipo,
+    objetivo) alimentam diretamente o algoritmo de geração de treinos.
+
+    Attributes:
+        controller (UsuarioController): Controller responsável pelas
+            operações de CRUD de alunos.
+        id_em_edicao (int | None): Identificador do aluno atualmente em
+            edição, ou ``None`` quando o formulário está em modo de
+            cadastro (novo registro).
+    """
+
     def __init__(self, master, **kwargs):
+        """Inicializa a view, instanciando o controller e montando a interface.
+
+        Args:
+            master: Widget pai (container) onde esta tela será renderizada.
+            **kwargs: Argumentos adicionais repassados ao ``ctk.CTkFrame``.
+        """
         super().__init__(master, **kwargs)
         self.controller = UsuarioController()
         self.id_em_edicao = None 
         self.setup_ui()
 
     def setup_ui(self):
+        """Monta os widgets da tela: formulário de cadastro/edição e listagem."""
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
 
@@ -138,6 +163,13 @@ class UsuarioView(ctk.CTkFrame):
         self.atualizar_lista()
 
     def processar_salvamento(self):
+        """Cadastra um novo aluno ou atualiza um aluno existente.
+
+        Quando :attr:`id_em_edicao` está definido, delega a atualização ao
+        controller; caso contrário, cadastra um novo aluno vinculado ao
+        professor logado. Eventuais erros de validação/persistência são
+        capturados e exibidos ao usuário.
+        """
         try:
             if self.id_em_edicao:
                 # Operação de UPDATE
@@ -171,6 +203,12 @@ class UsuarioView(ctk.CTkFrame):
             messagebox.showerror(LocaleManager.t("erro"), f"{LocaleManager.t('erro')}: {str(e)}")
 
     def carregar_para_edicao(self):
+        """Carrega os dados de um aluno (pelo ID informado) no formulário.
+
+        Busca o aluno pelo ID digitado no campo de ações e, se encontrado,
+        preenche o formulário com seus dados, alternando a tela para o
+        modo de edição (:attr:`id_em_edicao` definido).
+        """
         id_busca = self.txt_id_acao.get()
         if not id_busca:
             messagebox.showwarning(LocaleManager.t("aviso"), LocaleManager.t("msg_informe_id_editar"))
@@ -199,6 +237,12 @@ class UsuarioView(ctk.CTkFrame):
             self.txt_descricao.set_text(usuario.descricao)
 
     def excluir_registro(self):
+        """Exclui o aluno correspondente ao ID informado, após confirmação.
+
+        Solicita confirmação do usuário antes de remover o registro. Se o
+        aluno excluído for o que estava em edição, o formulário é limpo
+        automaticamente.
+        """
         id_busca = self.txt_id_acao.get()
         if not id_busca:
             messagebox.showwarning(LocaleManager.t("aviso"), LocaleManager.t("msg_informe_id_excluir"))
@@ -216,6 +260,7 @@ class UsuarioView(ctk.CTkFrame):
                 messagebox.showerror(LocaleManager.t("erro"), LocaleManager.t("msg_id_nao_localizado"))
 
     def limpar_formulario(self):
+        """Restaura o formulário ao estado inicial de cadastro (não edição)."""
         self.id_em_edicao = None
         self.lbl_titulo_form.configure(text=LocaleManager.t("titulo_usuarios"), text_color=["#000", "#fff"])
         self.btn_salvar.configure(text=LocaleManager.t("btn_salvar_usuario"), fg_color="#2E7D32", hover_color="#1B5E20")
@@ -226,6 +271,12 @@ class UsuarioView(ctk.CTkFrame):
         self.txt_descricao.clear()
 
     def atualizar_lista(self):
+        """Recarrega a listagem de alunos do professor logado.
+
+        Limpa a área de texto e reconstrói a listagem tabular (ID, nome,
+        biotipo e IMC calculado) a partir dos dados atuais do banco de
+        dados.
+        """
         self.textbox.configure(state="normal")
         self.textbox.delete("0.0", "end")
         usuarios = self.controller.listar_todos()

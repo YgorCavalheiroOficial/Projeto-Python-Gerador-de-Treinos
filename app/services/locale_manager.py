@@ -1,8 +1,32 @@
+"""Serviço de internacionalização (i18n) do FitLogic.
+
+Implementa a tradução automática da interface para português, inglês e
+espanhol sem exigir qualquer configuração manual do usuário: o idioma é
+detectado a partir das configurações do sistema operacional na
+inicialização (ver :meth:`LocaleManager.inicializar`).
+"""
+
 import locale
 import os
 import sys
 
 class LocaleManager:
+    """Gerencia a detecção de idioma e o catálogo de traduções da interface.
+
+    Mantém um dicionário central (:attr:`_traducoes`) com todas as chaves
+    de texto da interface gráfica traduzidas para português (``pt``),
+    inglês (``en``) e espanhol (``es``). O idioma ativo é detectado
+    automaticamente a partir do sistema operacional do usuário, conforme
+    exigido pelo critério de internacionalização do projeto (o usuário
+    nunca é solicitado a escolher um idioma manualmente).
+
+    Attributes:
+        _idioma_ativo (str): Sigla do idioma atualmente ativo (``pt``,
+            ``en`` ou ``es``). Padrão: ``"pt"``.
+        _traducoes (dict): Dicionário aninhado ``{idioma: {chave: texto}}``
+            com todas as strings traduzidas da interface.
+    """
+
     # Idioma padrão caso a detecção falhe ou o idioma do SO não seja suportado
     _idioma_ativo = "pt"
     
@@ -283,6 +307,20 @@ class LocaleManager:
 
     @classmethod
     def inicializar(cls):
+        """Detecta automaticamente o idioma do sistema operacional do usuário.
+
+        Tenta, em ordem de prioridade: (1) a API nativa do Windows
+        (``GetUserDefaultLocaleName``), (2) as variáveis de ambiente POSIX
+        ``LANG``/``LC_ALL``/``LC_MESSAGES`` e (3) o módulo ``locale`` do
+        Python como fallback multiplataforma. O primeiro idioma suportado
+        (``pt``, ``en`` ou ``es``) encontrado é definido como
+        :attr:`_idioma_ativo`. Caso nenhuma estratégia tenha êxito, mantém
+        o português como idioma padrão.
+
+        Importante: o usuário nunca é questionado sobre o idioma desejado;
+        toda a detecção é automática e transparente, conforme exigido pelo
+        critério de internacionalização do projeto.
+        """
         if sys.platform == "win32":
             try:
                 import ctypes
@@ -316,5 +354,15 @@ class LocaleManager:
         
     @classmethod
     def t(cls, chave):
-        """Retorna o termo traduzido com base na chave informada."""
+        """Retorna o termo traduzido com base na chave informada.
+
+        Args:
+            chave (str): Chave de tradução (ex.: ``"btn_salvar_usuario"``)
+                buscada no dicionário do idioma ativo.
+
+        Returns:
+            str: O texto traduzido correspondente à chave no idioma ativo.
+                Caso a chave não exista no catálogo, a própria chave é
+                retornada como fallback (evita erro em tempo de execução).
+        """
         return cls._traducoes[cls._idioma_ativo].get(chave, chave)

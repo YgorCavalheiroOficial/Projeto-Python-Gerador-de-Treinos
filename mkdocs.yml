@@ -1,0 +1,49 @@
+site_name: FitLogic - Documentação da API
+site_description: Documentação técnica gerada automaticamente a partir dos docstrings do código-fonte (classes, métodos e parâmetros).
+repo_url: https://github.com/YgorCavalheiroOficial/Projeto-Python-Gerador-de-Treinos
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    primary: indigo
+  features:
+    - navigation.expand
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+            merge_init_into_class: true
+            members_order: source
+
+nav:
+  - Início: index.md
+  - Models:
+      - Usuario: models/usuario.md
+      - Professor: models/professor.md
+      - Exercicio: models/exercicio.md
+      - PlanoTreino e ItemTreino: models/plano_treino.md
+      - SessionManager: models/session_manager.md
+  - Controllers:
+      - AuthController: controllers/auth_controller.md
+      - UsuarioController: controllers/usuario_controller.md
+      - ExercicioController: controllers/exercicio_controller.md
+      - TreinoController: controllers/treino_controller.md
+  - Services:
+      - GeradorTreinoService: services/gerador_treino.md
+      - GeradorPDFService: services/gerador_pdf.md
+      - LocaleManager: services/locale_manager.md
+  - Views:
+      - LoginView: views/login_view.md
+      - MainWindow: views/main_window.md
+      - UsuarioView: views/usuario_view.md
+      - ExercicioView: views/exercicio_view.md
+      - TreinoView: views/treino_view.md

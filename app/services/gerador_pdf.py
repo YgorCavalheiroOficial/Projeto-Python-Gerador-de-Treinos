@@ -1,3 +1,5 @@
+"""Serviço de geração de relatórios em PDF das fichas de treino."""
+
 import os
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
@@ -6,9 +8,28 @@ from reportlab.lib import colors
 from app.models.plano_treino import PlanoTreino
 
 class GeradorPDFService:
+    """Encapsula a geração de relatórios PDF a partir de um plano de treino.
+
+    Utiliza a biblioteca ReportLab (modelo Platypus) para montar um
+    documento formatado com os dados do aluno e uma tabela detalhando cada
+    exercício prescrito (séries, repetições e descanso), pronto para
+    impressão ou compartilhamento digital.
+    """
+
     @staticmethod
     def exportar_treino(plano: PlanoTreino, filepath: str):
-        """Gera um relatório profissional em PDF contendo a ficha de treino customizada."""
+        """Gera um relatório profissional em PDF contendo a ficha de treino customizada.
+
+        Args:
+            plano (PlanoTreino): Plano de treino já persistido, contendo o
+                usuário associado e a lista de itens (exercícios) a serem
+                listados no relatório.
+            filepath (str): Caminho completo (incluindo nome do arquivo)
+                onde o PDF gerado será salvo em disco.
+
+        Side Effects:
+            Cria (ou sobrescreve) um arquivo PDF no caminho informado.
+        """
         doc = SimpleDocTemplate(filepath, pagesize=letter)
         story = []
         styles = getSampleStyleSheet()

@@ -1,3 +1,10 @@
+"""Ponto de entrada da aplicação FitLogic.
+
+Orquestra a inicialização da infraestrutura (idioma e banco de dados) e o
+fluxo de telas, abrindo primeiro a tela de login e, após autenticação
+bem-sucedida, a janela principal do sistema.
+"""
+
 import logging
 from tkinter import messagebox
 from app.config import inicializar_banco
@@ -49,6 +56,13 @@ def preparar_ambiente() -> bool:
         return False
 
 def main():
+    """Função principal: prepara o ambiente e inicia o fluxo de telas.
+
+    Executa a validação/inicialização da infraestrutura
+    (:func:`preparar_ambiente`) e, em caso de sucesso, abre a
+    :class:`~app.views.login_view.LoginView`, que por sua vez aciona
+    :func:`abrir_sistema_principal` após uma autenticação bem-sucedida.
+    """
     # Executa a validação de infraestrutura
     if not preparar_ambiente():
         return

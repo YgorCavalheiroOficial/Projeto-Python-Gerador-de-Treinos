@@ -1,3 +1,5 @@
+"""Tela de geração e exportação de planos de treino."""
+
 import customtkinter as ctk
 import os
 from tkinter import messagebox, filedialog
@@ -6,7 +8,27 @@ from app.controllers.usuario_controller import UsuarioController
 from app.services.locale_manager import LocaleManager 
 
 class TreinoView(ctk.CTkFrame):
+    """Tela responsável pela geração inteligente e exportação de treinos.
+
+    Permite ao professor selecionar um aluno já cadastrado, disparar o
+    algoritmo de prescrição automática
+    (:class:`~app.controllers.treino_controller.TreinoController`) e
+    exportar o resultado em PDF, representando a funcionalidade central do
+    sistema (vai além do CRUD).
+
+    Attributes:
+        treino_controller (TreinoController): Controller de geração/exportação de treinos.
+        usuario_controller (UsuarioController): Controller usado para listar os alunos disponíveis.
+        plano_atual (PlanoTreino | None): Último plano de treino gerado nesta sessão de tela.
+    """
+
     def __init__(self, master, **kwargs):
+        """Inicializa a view, instanciando os controllers e montando a interface.
+
+        Args:
+            master: Widget pai (container) onde esta tela será renderizada.
+            **kwargs: Argumentos adicionais repassados ao ``ctk.CTkFrame``.
+        """
         super().__init__(master, **kwargs)
         self.treino_controller = TreinoController()
         self.usuario_controller = UsuarioController()
@@ -14,6 +36,7 @@ class TreinoView(ctk.CTkFrame):
         self.setup_ui()
 
     def setup_ui(self):
+        """Monta os widgets da tela: seleção de aluno, área de resultado e exportação."""
         self.grid_columnconfigure(0, weight=1)
 
         # Top Bar para seleção de Aluno
@@ -44,6 +67,12 @@ class TreinoView(ctk.CTkFrame):
         self.carregar_usuarios()
 
     def carregar_usuarios(self):
+        """Atualiza o combobox de seleção com a lista de alunos do professor logado.
+
+        Consulta os alunos via :class:`UsuarioController`, monta um mapa
+        ``"id - nome" -> id`` para facilitar a seleção e pré-seleciona o
+        primeiro aluno da lista, caso exista.
+        """
         usuarios = self.usuario_controller.listar_todos()
         self.mapeamento_usuarios = {f"{u.id} - {u.nome}": u.id for u in usuarios}
         self.cb_usuarios.configure(values=list(self.mapeamento_usuarios.keys()))
@@ -51,6 +80,13 @@ class TreinoView(ctk.CTkFrame):
             self.cb_usuarios.set(list(self.mapeamento_usuarios.keys())[0])
 
     def gerar_treino(self):
+        """Aciona a geração de um novo plano de treino para o aluno selecionado.
+
+        Valida se um aluno foi selecionado, solicita ao
+        :class:`TreinoController` a geração do plano e exibe o resultado
+        formatado na área de texto, habilitando o botão de exportação em
+        PDF ao final.
+        """
         selecionado = self.cb_usuarios.get()
         if not selecionado:
             messagebox.showwarning(LocaleManager.t("titulo_erro"), LocaleManager.t("erro_selecionar_usuario"))
@@ -73,6 +109,12 @@ class TreinoView(ctk.CTkFrame):
             messagebox.showinfo(LocaleManager.t("titulo_sucesso"), LocaleManager.t("treino_gerado_sucesso"))
 
     def exportar_pdf(self):
+        """Exporta o plano de treino atualmente exibido para um arquivo PDF.
+
+        Abre uma caixa de diálogo nativa para o usuário escolher o local de
+        salvamento e delega a geração do arquivo ao
+        :class:`TreinoController`, exibindo uma confirmação ao final.
+        """
         if not self.plano_atual:
             return
         

@@ -1,3 +1,5 @@
+"""Tela de cadastro e gerenciamento do catálogo de exercícios."""
+
 import customtkinter as ctk
 from tkinter import messagebox
 from app.controllers.exercicio_controller import ExercicioController
@@ -5,13 +7,35 @@ from app.views.components.custom_inputs import CustomFormInput
 from app.services.locale_manager import LocaleManager 
 
 class ExercicioView(ctk.CTkFrame):
+    """Tela de CRUD do catálogo de exercícios, com formulário e listagem.
+
+    Segue o mesmo padrão visual e de organização de botões das demais
+    telas do sistema (formulário à esquerda, listagem à direita, ações de
+    editar/excluir por ID), garantindo a consistência exigida entre as
+    telas da aplicação.
+
+    Attributes:
+        controller (ExercicioController): Controller responsável pelas
+            operações de CRUD de exercícios.
+        id_em_edicao (int | None): Identificador do exercício atualmente em
+            edição, ou ``None`` quando o formulário está em modo de
+            cadastro (novo registro).
+    """
+
     def __init__(self, master, **kwargs):
+        """Inicializa a view, instanciando o controller e montando a interface.
+
+        Args:
+            master: Widget pai (container) onde esta tela será renderizada.
+            **kwargs: Argumentos adicionais repassados ao ``ctk.CTkFrame``.
+        """
         super().__init__(master, **kwargs)
         self.controller = ExercicioController()
         self.id_em_edicao = None
         self.setup_ui()
 
     def setup_ui(self):
+        """Monta os widgets da tela: formulário de cadastro/edição e listagem."""
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
 
@@ -76,6 +100,13 @@ class ExercicioView(ctk.CTkFrame):
         self.atualizar_lista()
 
     def processar_salvamento(self):
+        """Cadastra um novo exercício ou atualiza um existente.
+
+        Valida se o campo de nome foi preenchido. Quando
+        :attr:`id_em_edicao` está definido, delega a atualização ao
+        controller; caso contrário, cadastra um novo exercício. Ao final,
+        limpa o formulário e atualiza a listagem.
+        """
         if not self.txt_nome.get():
             messagebox.showwarning(LocaleManager.t("titulo_erro"), LocaleManager.t("aviso"))
             return
@@ -91,6 +122,12 @@ class ExercicioView(ctk.CTkFrame):
         self.atualizar_lista()
 
     def carregar_para_edicao(self):
+        """Carrega os dados de um exercício (pelo ID informado) no formulário.
+
+        Busca o exercício pelo ID digitado no campo de ações e, se
+        encontrado, preenche o formulário com seus dados, alternando a
+        tela para o modo de edição (:attr:`id_em_edicao` definido).
+        """
         id_busca = self.txt_id_acao.get()
         if not id_busca:
             messagebox.showwarning(LocaleManager.t("titulo_erro"), LocaleManager.t("msg_id_nao_localizado"))
@@ -113,6 +150,12 @@ class ExercicioView(ctk.CTkFrame):
         self.txt_desc.set_text(ex.descricao if ex.descricao else "")
 
     def excluir_registro(self):
+        """Exclui o exercício correspondente ao ID informado, após confirmação.
+
+        Solicita confirmação do usuário antes de remover o registro. Se o
+        exercício excluído for o que estava em edição, o formulário é
+        limpo automaticamente.
+        """
         id_busca = self.txt_id_acao.get()
         if not id_busca:
             messagebox.showwarning(LocaleManager.t("titulo_erro"), LocaleManager.t("msg_id_nao_localizado"))
@@ -130,6 +173,7 @@ class ExercicioView(ctk.CTkFrame):
                 messagebox.showerror(LocaleManager.t("erro"), LocaleManager.t("erro"))
 
     def limpar_formulario(self):
+        """Restaura o formulário ao estado inicial de cadastro (não edição)."""
         self.id_em_edicao = None
         self.lbl_titulo_form.configure(text=LocaleManager.t("titulo_exercicios"), text_color=("#000", "#fff"))
         self.btn_salvar.configure(text=LocaleManager.t("btn_salvar_exercicio"), fg_color="#2E7D32", hover_color="#1B5E20")
@@ -138,6 +182,11 @@ class ExercicioView(ctk.CTkFrame):
         self.txt_desc.clear()
 
     def atualizar_lista(self):
+        """Recarrega a listagem de exercícios cadastrados no catálogo.
+
+        Limpa a área de texto e reconstrói a listagem tabular (ID, nome e
+        grupo muscular) a partir dos dados atuais do banco de dados.
+        """
         self.textbox.configure(state="normal")
         self.textbox.delete("0.0", "end")
         exercicios = self.controller.listar_todos()

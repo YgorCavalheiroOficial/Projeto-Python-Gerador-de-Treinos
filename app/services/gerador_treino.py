@@ -1,14 +1,46 @@
+"""Serviço com o algoritmo de geração inteligente de planos de treino."""
+
 from app.models.usuario import Usuario
 from app.models.exercicio import Exercicio
 from app.models.plano_treino import PlanoTreino, ItemTreino
 from sqlalchemy.orm import Session
 
 class GeradorTreinoService:
+    """Concentra a regra de negócio de prescrição automática de treinos.
+
+    Esta é a principal funcionalidade do sistema que vai além do CRUD
+    básico: a partir do biotipo e do objetivo do usuário, o serviço decide
+    a divisão semanal (ABC/ABCD), o volume de séries/repetições e o tempo
+    de descanso ideal, então persiste um :class:`~app.models.plano_treino.PlanoTreino`
+    completo, populado com os exercícios disponíveis no catálogo.
+    """
+
     @staticmethod
     def gerar_plano(db: Session, usuario: Usuario) -> PlanoTreino:
-        """
-        Algoritmo inteligente de prescrição (Além do CRUD).
-        Avalia biotipo e objetivos para definir volume, repetições e descanso.
+        """Gera e persiste um novo plano de treino personalizado.
+
+        Algoritmo inteligente de prescrição (além do CRUD): avalia o
+        biotipo do usuário para decidir séries, repetições, descanso e a
+        divisão de treino, popula o catálogo com exercícios básicos caso
+        ele esteja vazio, e distribui os exercícios disponíveis dentro do
+        plano gerado.
+
+        Regras de negócio aplicadas por biotipo:
+            * Ectomorfo: 3 séries x 8 repetições, 120s de descanso, divisão ABC.
+            * Endomorfo: 4 séries x 15 repetições, 45s de descanso, divisão ABCD.
+            * Mesomorfo (padrão): 4 séries x 10 repetições, 90s de descanso, divisão ABC.
+
+        Args:
+            db (Session): Sessão ativa do SQLAlchemy utilizada para
+                consultar exercícios e persistir o plano gerado.
+            usuario (Usuario): Usuário (aluno) para o qual o treino será
+                gerado; seu atributo ``biotipo`` define os parâmetros do
+                algoritmo.
+
+        Returns:
+            PlanoTreino: O plano de treino recém-criado e já persistido no
+                banco, com todos os seus itens (:class:`~app.models.plano_treino.ItemTreino`)
+                associados.
         """
         # 1. Define parâmetros de treino conforme o Biotipo
         biotipo = usuario.biotipo.upper()

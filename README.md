@@ -73,6 +73,22 @@ Antes de começar, certifique-se de ter o **Python 3.10 ou superior** instalado 
 
 ---
 
+## Documentação da API
+
+Todas as classes e métodos do projeto estão comentados no padrão **Google
+Docstring** (equivalente Python ao Javadoc). A documentação navegável é
+gerada automaticamente a partir desses comentários com o **MkDocs** +
+**mkdocstrings**:
+
+```bash
+pip install -r requirements-docs.txt
+mkdocs serve   # visualiza em http://127.0.0.1:8000 com hot-reload
+# ou
+mkdocs build   # gera a versão estática na pasta site/
+```
+
+---
+
 ## ToDo
 * **Dashboard Gráfico de Evolução:** Gráficos interativos integrados à interface (usando Matplotlib) para exibir o histórico de peso, IMC e carga do aluno ao longo do tempo.
 * **Cronômetro de Descanso Integrado:** Um timer visual na tela de treinos para auxiliar o usuário a computar o tempo de descanso entre as séries em tempo real.
